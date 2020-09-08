@@ -6,8 +6,8 @@ module.exports = app => {
   router.post('/admin/upLoadFile', controller.admin.upLoadFile.upload); // 上传图片
   router.post('/admin/login', controller.admin.user.login);
   router.get('/admin/article/typeInfo', adminauth, controller.admin.main.getTypeInfo);
-  router.post('/admin/artilce/add', controller.admin.main.addArticle);
-  router.post('/admin/artilce/update', controller.admin.main.updateArticle);
+  router.post('/admin/article/add', controller.admin.main.addArticle);
+  router.post('/admin/article/update', controller.admin.main.updateArticle);
   router.post('/admin/article/list', adminauth, controller.admin.main.getArticleList);
   router.get('/admin/article/del/:id', adminauth, controller.admin.main.delArticle);
   router.get('/admin/article/getById/:id', adminauth, controller.admin.main.getArticleById);

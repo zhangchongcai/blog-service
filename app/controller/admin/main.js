@@ -6,15 +6,17 @@ class MainController extends Contoller {
   // 获取类别
   async getTypeInfo() {
     const result = await this.app.mysql.select('type');
-    this.ctx.body = { data: result };
+    const insertSuccess = result.affectedRows === 1;
+    const message = insertSuccess ? '查询成功' : '查询失败';
+    this.ctx.body = utils([ insertSuccess, result, message ]);
   }
   // 添加
   async addArticle() {
     const tmpArticle = this.ctx.request.body;
-    const resulat = await this.app.mysql.insert('article', tmpArticle);
-    const insertSuccess = resulat.affectedRows === 1;
+    const result = await this.app.mysql.insert('article', tmpArticle);
+    const insertSuccess = result.affectedRows === 1;
     const message = insertSuccess ? '插入成功' : '插入失败';
-    this.ctx.body = utils([ insertSuccess, { 'insertId': resulat.insertId }, message ]);
+    this.ctx.body = utils([ insertSuccess, { 'insertId': result.insertId }, message ]);
   }
   // 修改文章
   async updateArticle() {
