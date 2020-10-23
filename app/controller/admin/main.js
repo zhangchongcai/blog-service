@@ -16,7 +16,7 @@ class MainController extends Contoller {
     const result = await this.app.mysql.insert('article', tmpArticle);
     const insertSuccess = result.affectedRows === 1;
     const message = insertSuccess ? '插入成功' : '插入失败';
-    this.ctx.body = utils([ insertSuccess, { 'insertId': result.insertId }, message ]);
+    this.ctx.body = utils([ insertSuccess ? 200 : 400, { 'insertId': result.insertId }, message ]);
   }
   // 修改文章
   async updateArticle() {
@@ -54,14 +54,19 @@ class MainController extends Contoller {
                 'article.title as title,' +
                 'article.introduce as introduce,' +
                 'article.article_content as article_content,' +
+                'article.type as type,' +
+                'article.tags as tags,' +
                 "DATE_FORMAT(article.addTime,'%Y-%m-%d' ) as addTime," +
                 'type.typeName as typeName, ' +
                 'type.id as typeId ' +
                 'FROM article LEFT JOIN type ON article.type_id = type.Id ' +
                 'WHERE article.id = ' + id;
-    const result = await this.app.mysql.query(sql);
-    const message = result.length >= 1 ? '查询成功！' : '查询失败！';
-    this.ctx.body = utils([ 1, result[0], message ]);
+    const result = (await this.app.mysql.query(sql))[0];
+    const message = result ? '查询成功！' : '查询失败！';
+    if (result) {
+      result.tags = JSON.parse(result.tags);
+    }
+    this.ctx.body = utils([ 1, result, message ]);
   }
 }
 
